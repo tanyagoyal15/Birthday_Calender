@@ -92,6 +92,7 @@ var data = [
 showData();
 createWeekCards();
 var birthdays = [0,0,0,0,0,0,0] // initially showing no ones birthdays
+let squareSize = ["sq1", "sq2", "sq3", "sq4"]
 
 function showData() {
     let myData = JSON.stringify(data, undefined, data.length);
@@ -140,7 +141,6 @@ function onClickUpdate() {
 function updateCards(bdays_found) {
     
     let birthdayDiv;
-    let squareSize = ["sq1", "sq2", "sq3", "sq4"]
     bdays_found.map(d => {
         let birthDate = new Date(d.birthday);
         let weekDay = birthDate.getDay()
@@ -173,8 +173,9 @@ function updateCards(bdays_found) {
         if (val != 0) {
             val.map(a => {
                 let initials = getInitials(a.name);
+                const squareIndex = val.length - 1;
                 // console.log(initials);
-                renderPerson(birthdayDiv, squareSize[val.length - 1], initials) //passing div that needs to be updated, type of sqr siz and initials
+                renderPerson(birthdayDiv, squareIndex, initials) //passing div that needs to be updated, type of sqr siz and initials
             });
         } else {
             //render ot found div
@@ -197,10 +198,10 @@ const getInitials = string => {
     }
 };
 
-function renderPerson(birthdayDiv, square, name) {
+function renderPerson(birthdayDiv, squareIndex, name) {
     //creating a square for a Person
     let bdcard = document.createElement("div");
-    bdcard.className = square;
+    bdcard.className = squareIndex < 4 ? squareSize[squareIndex] : 'sq4';
     bdcard.style.background = generateRandomColor();
 
     //creating a span element for name 
