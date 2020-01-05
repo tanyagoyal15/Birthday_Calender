@@ -272,7 +272,7 @@ function renderPerson(birthdayDiv, squareIndex, name) {
 
   //creating a span element for name
   let birthdayCardName = document.createElement("span");
-  birthdayCardName.className = "bdcardText";
+  birthdayCardName.className = "birthdayCardName";
 
   birthdayCardName.append(name);
   birthdayCard.append(birthdayCardName);
