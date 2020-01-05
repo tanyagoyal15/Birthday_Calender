@@ -1,0 +1,107 @@
+#main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.weekcard {
+
+    width: 150px;
+    height: 200px;
+}
+
+.weekName {
+    height: 20%;
+    border-radius: 5px 5px 0 0;
+    background-color: #b39ddb;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.weekNameText {
+    margin : 0;
+    display : flex;
+    justify-content : flex-end;
+    padding : 10px;
+    font-size : 15px;
+}
+
+.birthdayCard {
+    height: 80%;
+    border: 1px solid #cccccc;
+    display: flex;
+}
+
+form {
+    margin: 3% auto;
+    display: flex;
+    justify-content: space-around;
+}
+
+form label {
+    margin: 7%;
+}
+
+form input {
+    width: 200px;
+    padding: 10px;
+    display: block;
+    margin-left: 7%;
+}
+
+form button {
+    width: 100px;
+    border-radius: 5px;
+    text-decoration: none;
+    outline: none;
+    border: none;
+    background-color: cornflowerblue;
+    color: #fff;
+    padding: 10px;
+    margin: 7%;
+}
+
+
+.sq1 {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sq2 {
+    width: 50%;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sq3 {
+    width: 33.3%;
+    height: 33.3%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sq4 {
+    width: 25%;
+    height: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+ 
+.no-img {
+    width: 100%;
+    height: 100%;
+}
+
+.bdcardText {
+    font-size : 20px;
+    text-transform : uppercase;
+    color : #fff;
+}
