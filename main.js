@@ -91,17 +91,15 @@ var data = [
 
 showData();
 createWeekCards();
-var countArray = [0,0,0,0,0,0,0]
+var birthdays = [0,0,0,0,0,0,0] // initially showing no ones birthdays
 
 function showData() {
-    // using JSON.stringify pretty print capability:
-    var list = JSON.stringify(data, undefined, data.length);
-    // display pretty printed object in text area:
-    document.getElementById('data').innerHTML = list;
+    let myData = JSON.stringify(data, undefined, data.length);
+    document.getElementById('data').innerHTML = myData;
 }
 
 function createWeekCards() {
-    let weekCard, weekName, weekNameText, birthdayCard, img;
+    let weekCard, weekName, weekNameText, birthdayCard;
     let weekDay = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
     for (i = 0; i < 7; i++) {
@@ -113,10 +111,8 @@ function createWeekCards() {
         //making weekname div (upper div of weekcard)
         weekName = document.createElement("div");
         weekName.className = "weekName";
-
         weekNameText = document.createElement("h3");
-        weekNameText.className = "weekNameText";
-        
+        weekNameText.className = "weekNameText";        
         weekNameText.append(weekDay[i]);  
         weekName.append(weekNameText);
         weekCard.append(weekName);
@@ -124,24 +120,20 @@ function createWeekCards() {
         //making weekname div (upper div of weekcard)
         birthdayCard = document.createElement("div");
         birthdayCard.className = "birthdayCard";
-        let img = document.createElement("IMG");
-        img.src = "https://picsum.photos/seed/picsum/150/140";
-
-        birthdayCard.appendChild(img);
         weekCard.append(birthdayCard);   
 
         document.getElementById("main").appendChild(weekCard);
     }
 }
 
-let currentInput = ""
 function onClickUpdate() {
-    var inputVal = document.getElementById("myInput").value;
+    let currentInput = ""
+    let inputVal = document.getElementById("myInput").value;
     if(currentInput != inputVal) currentInput = inputVal;
     else return;
-    countArray = countArray.map(_ => 0)
-    var bdays_found = data.filter(b => b.birthday.includes(inputVal))
-    console.log(bdays_found)
+    birthdays = birthdays.map(_ => 0)
+    let bdays_found = data.filter(d => d.birthday.includes(inputVal))
+    // console.log(bdays_found)
     updateCards(bdays_found)
 }
 
@@ -151,26 +143,28 @@ function updateCards(bdays_found) {
     let squareSize = ["sq1", "sq2", "sq3", "sq4"]
     bdays_found.map(d => {
         let birthDate = new Date(d.birthday);
-        console.log(birthDate.getDay()); // 1 , 6, 1 
+        let weekDay = birthDate.getDay()
+        // console.log(weekDay); // 1 , 6, 1 
+
+        //updating birthdays for the cards that has to be updated
         
-        if(countArray[birthDate.getDay()]==0) { 
-            var list = []
-            list.push(d)
-            countArray[birthDate.getDay()] = list;
+        if(birthdays[weekDay]==0) { 
+            let list = [] // iif no previous element is there creating a new list
+            list.push(d) // ad pushing that person's bday
+            birthdays[weekDay] = list; 
         } else {
-            countArray[birthDate.getDay()].push(d)
-            countArray[birthDate.getDay()].sort((a, b) => a.name.localeCompare(b.name));
+            birthdays[weekDay].push(d) // else push new element to the previous one
+            birthdays[weekDay].sort((a, b) => a.name.localeCompare(b.name)); // sort on the basis of name
         }  
     })
 
-    console.log(countArray);
-    countArray.map((val,idx)=> {
-        console.log(val);
+    // console.log(birthdays);  //[0,[{"",""}], 0, 0, 0 ,[{""}]]
+    birthdays.map((val,idx)=> { //mapping it to 
         
-            let card = document.getElementById(idx) //getting weekcard from its index that has to  be updated 
-            console.log(card);
+            let card = document.getElementById(idx) //getting weekcard from its index
+            // console.log(card);
             birthdayDiv = card.childNodes.item(1) //  getting 1st child of weekcard(div where squares will be shown) 
-            console.log(birthdayDiv);
+            // console.log(birthdayDiv);
             
             while (birthdayDiv.firstChild) {
                 birthdayDiv.removeChild(birthdayDiv.firstChild);
@@ -179,15 +173,16 @@ function updateCards(bdays_found) {
         if (val != 0) {
             val.map(a => {
                 let initials = getInitials(a.name);
-                console.log(initials);
-                createBirthdayCard(birthdayDiv, squareSize[val.length - 1], initials)
+                // console.log(initials);
+                renderPerson(birthdayDiv, squareSize[val.length - 1], initials) //passing div that needs to be updated, type of sqr siz and initials
             });
         } else {
-            let img = document.createElement("IMG");
-            img.src = "https://picsum.photos/seed/picsum/150/140";
-
-            birthdayDiv.appendChild(img);
-            console.log(birthdayDiv);
+            //render ot found div
+            let div = document.createElement("div");
+            div.className = "not_found"
+            div.append("__")
+            birthdayDiv.appendChild(div);
+            // console.log(birthdayDiv);
         }
     })
 }
@@ -202,7 +197,7 @@ const getInitials = string => {
     }
 };
 
-function createBirthdayCard(birthdayDiv, square, name) {
+function renderPerson(birthdayDiv, square, name) {
     //creating a square for a Person
     let bdcard = document.createElement("div");
     bdcard.className = square;
@@ -222,7 +217,7 @@ function  generateRandomColor() {
     let y = Math.floor(Math.random() * 256);
     let z = Math.floor(Math.random() * 256);
     let color = "rgb(" + x + "," + y + "," + z + ")";
-    console.log(color);
+    // console.log(color);
     return color;
 }
 
