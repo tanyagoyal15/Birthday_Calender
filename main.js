@@ -1,4 +1,3 @@
-// window.onload(function() {
 var data = [
   {
     name: "Tyrion Lannister",
@@ -118,17 +117,20 @@ var data = [
   }
 ];
 
-var birthdays = [0, 0, 0, 0, 0, 0, 0]; // initially showing no ones birthdays
-let squareSize = ["sq1", "sq2", "sq3", "sq4"];
+var birthdaysByDay = [0, 0, 0, 0, 0, 0, 0]; // initialize birthdays per day as 0
+let squareSize = ["sq1", "sq2", "sq3", "sq4"]; // styling to be used to display squares
+let currentInput = ""; // to store input by user
 
 showData();
 createWeekCards();
 
+//SHOW JSON DATA IN TEXTAREA
 function showData() {
   let myData = JSON.stringify(data, undefined, data.length);
   document.getElementById("data").innerHTML = myData;
 }
 
+//CREATE WEEKCARDS FOR 7 DAYS
 function createWeekCards() {
   let weekCard, weekName, weekNameText, birthdayCard;
   let weekDay = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -156,115 +158,135 @@ function createWeekCards() {
   }
 }
 
+//ON CLICKING UPDATE BUTTON
 function onClickUpdate() {
-  let currentInput = "";
+  event.preventDefault();
+  event.stopPropagation();
   let inputVal = document.getElementById("myInput").value;
   if (currentInput != inputVal) currentInput = inputVal;
   else return;
-  birthdays = birthdays.map(_ => 0);
-  let bdays_found = data.filter(d => d.birthday.includes(inputVal));
-  // console.log(bdays_found)
-  updateCards(bdays_found);
+  birthdaysByDay = birthdaysByDay.map(_ => 0);
+  let birthdaysFound = data.filter(d => d.birthday.includes(inputVal));
+  updateCards(birthdaysFound);
 }
 
-function updateCards(bdays_found) {
-  let birthdayDiv;
+//UPDATE WEEKCARDS ON INPUT
+function updateCards(birthdaysFound) {
   //adding new key birthdate to object
-  bdays_found = bdays_found.map(bday => {
-    // clone birthday using lodash
-    let newBirthDate = bday;
-    let birthDate = new Date(bday.birthday);
-    newBirthDate["birthDate"] = birthDate;
-    return newBirthDate;
+  birthdaysFound = updateBirthdaysFound(birthdaysFound);
+  createBirthdaysList(birthdaysFound);
+
+  //sorting on the basis of age(birthDate)
+  birthdaysByDay = sortBirthdaysByAge(birthdaysByDay);
+  displaySquares();
+}
+
+//ADDING NEW KEY "BIRTHDATE" IN BIRTHDAYSFOUND TO FIND AGE
+function updateBirthdaysFound(birthdaysFound) {
+  const newBirthdaysFound = birthdaysFound.map(birthDay => {
+    let newBirthDay = birthDay;
+    let birthDate = new Date(birthDay.birthday);
+    newBirthDay["birthDate"] = birthDate;
+    return newBirthDay;
   });
+  return newBirthdaysFound;
+}
 
-  bdays_found.map(bday => {
-    let weekDay = bday.birthDate.getDay(); // console.log(weekDay); // 1 , 6, 1
+//CREATING LIST OF PERSONS' BIRTHDAY AFTER ADDING NEW KEY
+function createBirthdaysList(birthdaysFound) {
+  birthdaysFound.forEach(birthday => {
+    //getting day of week
+    let weekDay = birthday.birthDate.getDay();
 
-    //updating birthdays for the cards that has to be updated
-    if (birthdays[weekDay] == 0) {
-      let list = []; // iif no previous element is there creating a new list
-      list.push(bday); // ad pushing that person's bday
-      birthdays[weekDay] = list;
+    if (birthdaysByDay[weekDay] === 0) {
+      //updating birthdays for the cards that has to be updated
+      let list = []; // creating a new list if no previous element is there
+      list.push(birthday); // and pushing that person's bday
+      birthdaysByDay[weekDay] = list;
     } else {
-      birthdays[weekDay].push(bday); // else push new element to the previous one
+      birthdaysByDay[weekDay].push(birthday); // else push new element to the previous one
     }
   });
+}
 
-  console.log(birthdays);
-  //sorting on the basis of age(birthDate)
-  birthdays = birthdays.map(birthday => {
-    console.log(birthday);
+//SORTING LIST ON THE BASIS OF AGE
+function sortBirthdaysByAge(birthdays) {
+  return birthdays.map(birthday => {
     const newBirthDay =
       birthday === 0
         ? birthday
         : birthday.sort((a, b) => a.birthDate < b.birthDate);
-    //   const newBirthDay = _.orderBy(birthday, ["birthDate"], ["asc"]);
     return newBirthDay;
   });
+}
 
-  console.log(birthdays);
-
-  // console.log(birthdays);  //[0,[{"",""}], 0, 0, 0 ,[{""}]]
-  birthdays.map((val, idx) => {
+//DISPLAYING SQUARES IN WEEKCARD
+function displaySquares() {
+  birthdaysByDay.forEach((birthdays, idx) => {
     let card = document.getElementById(idx); //getting weekcard from its index
-    // console.log(card);
     birthdayDiv = card.childNodes.item(1); //  getting 1st child of weekcard(div where squares will be shown)
-    // console.log(birthdayDiv);
 
+    // remove old children from birthday card
     while (birthdayDiv.firstChild) {
       birthdayDiv.removeChild(birthdayDiv.firstChild);
     }
 
-    if (val != 0) {
-      val.map(a => {
+    if (birthdays !== 0) {
+      birthdays.forEach(a => {
         let initials = getInitials(a.name);
-        const squareIndex = val.length - 1;
-        // console.log(initials);
-        renderPerson(birthdayDiv, squareIndex, initials); //passing div that needs to be updated, type of sqr siz and initials
+        const squareIndex = birthdays.length - 1;
+        //passing div that needs to be updated, type of sqr size and initials
+        renderPerson(birthdayDiv, squareIndex, initials);
       });
     } else {
-      //render ot found div
-      let div = document.createElement("div");
-      div.className = "not_found";
-      div.append("__");
-      birthdayDiv.appendChild(div);
-      // console.log(birthdayDiv);
+      renderDefault();
     }
   });
 }
 
+//GET INITIALS FROM NAME
 function getInitials(string) {
   const names = string.split(" ");
-  const initials = names.map(name => name.charAt(0).toUpperCase());
+  const initials = names.map(name => name[0].toUpperCase());
   if (initials.length > 1) {
     return `${initials[0]}${initials[initials.length - 1]}`;
   }
   return initials[0];
 }
 
+//RENDER THIS IF NO PERSON BIRTHDAY FOUND
+function renderDefault() {
+  //render not found div
+  let div = document.createElement("div");
+  div.className = "not_found";
+  div.append("__");
+  birthdayDiv.appendChild(div);
+}
+
+//RENDER THIS IF PERSON BIRTHDAY FOUND
 function renderPerson(birthdayDiv, squareIndex, name) {
   //creating a square for a Person
-  let bdcard = document.createElement("div");
-  bdcard.className = squareIndex < 4 ? squareSize[squareIndex] : "sq4";
-  bdcard.style.background = generateRandomColor();
+  let birthdayCard = document.createElement("div");
+  birthdayCard.className = squareIndex < 4 ? squareSize[squareIndex] : "sq4";
+  birthdayCard.style.background = generateRandomColor();
 
   //creating a span element for name
-  let bdcardText = document.createElement("span");
-  bdcardText.className = "bdcardText";
+  let birthdayCardName = document.createElement("span");
+  birthdayCardName.className = "bdcardText";
 
-  bdcardText.append(name);
-  bdcard.append(bdcardText);
-  birthdayDiv.append(bdcard);
+  birthdayCardName.append(name);
+  birthdayCard.append(birthdayCardName);
+  birthdayDiv.append(birthdayCard);
 }
 
+function getRandomColorValue() {
+  return Math.floor(Math.random() * 256);
+}
+
+//GENERATE RANDOM COLORED SQUARES
 function generateRandomColor() {
-  let x = Math.floor(Math.random() * 256);
-  let y = Math.floor(Math.random() * 256);
-  let z = Math.floor(Math.random() * 256);
-  let color = "rgb(" + x + "," + y + "," + z + ")";
-  // console.log(color);
-  return color;
+  const r = getRandomColorValue();
+  const g = getRandomColorValue();
+  const b = getRandomColorValue();
+  return `rgb(${r}, ${g}, ${b})`;
 }
-
-// })

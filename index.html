@@ -1,26 +1,23 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Birthday Calender</title>
-    <link rel="stylesheet" href="main.css">
-</head>
+    <link rel="stylesheet" href="main.css" />
+  </head>
 
-<body>
+  <body>
     <h1 style="text-align: center; font-weight: lighter;">Birthday Cal</h1>
     <div class="calender">
-        <div id="main"></div>
-        <form>
-            <textarea rows="30" cols="100" id="data"></textarea>
-            <div>
-            <label>Year</label>
-            <input type="text" placeholder="YYYY..." id="myInput">
-            <button type="button" onclick="onClickUpdate();">Update</button>
-            </div>
-        </form>
+      <div id="main"></div>
+      <form onsubmit="onClickUpdate()">
+        <textarea rows="30" cols="100" id="data"></textarea>
+        <div>
+          <label>Year</label>
+          <input type="text" placeholder="YYYY..." id="myInput" />
+          <button type="submit">Update</button>
+        </div>
+      </form>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
     <script src="main.js"></script>
-</body>
-
+  </body>
 </html>
