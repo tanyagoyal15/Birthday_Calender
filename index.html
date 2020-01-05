@@ -2,13 +2,15 @@
 <html>
   <head>
     <title>Birthday Calender</title>
-    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.min.css" />
   </head>
 
   <body>
     <h1 style="text-align: center; font-weight: lighter;">Birthday Cal</h1>
     <div class="calender">
       <div id="main"></div>
+      <div id="noOfBirthdays"></div>
       <form onsubmit="onClickUpdate()">
         <textarea rows="30" cols="100" id="data"></textarea>
         <div>
@@ -18,6 +20,7 @@
         </div>
       </form>
     </div>
-    <script src="main.js"></script>
+    <script src="script.js"></script>
+    <script src="script.min.js"></script>
   </body>
 </html>

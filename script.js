@@ -172,12 +172,13 @@ function onClickUpdate() {
 
 //UPDATE WEEKCARDS ON INPUT
 function updateCards(birthdaysFound) {
-  //adding new key birthdate to object
+  //adding new key "birthdate" to object
   birthdaysFound = updateBirthdaysFound(birthdaysFound);
+  //new list after updating
   createBirthdaysList(birthdaysFound);
-
   //sorting on the basis of age(birthDate)
   birthdaysByDay = sortBirthdaysByAge(birthdaysByDay);
+  //display persons as square
   displaySquares();
 }
 
@@ -254,7 +255,7 @@ function getInitials(string) {
   return initials[0];
 }
 
-//RENDER THIS IF NO PERSON BIRTHDAY FOUND
+//RENDER THIS, IF NO PERSON BIRTHDAY FOUND
 function renderDefault() {
   //render not found div
   let div = document.createElement("div");
@@ -263,7 +264,7 @@ function renderDefault() {
   birthdayDiv.appendChild(div);
 }
 
-//RENDER THIS IF PERSON BIRTHDAY FOUND
+//RENDER THIS, IF PERSON BIRTHDAY FOUND
 function renderPerson(birthdayDiv, squareIndex, name) {
   //creating a square for a Person
   let birthdayCard = document.createElement("div");
