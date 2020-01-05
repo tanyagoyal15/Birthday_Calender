@@ -134,8 +134,12 @@ function createWeekCards() {
     }
 }
 
+let currentInput = ""
 function onClickUpdate() {
     var inputVal = document.getElementById("myInput").value;
+    if(currentInput != inputVal) currentInput = inputVal;
+    else return;
+    countArray = countArray.map(_ => 0)
     var bdays_found = data.filter(b => b.birthday.includes(inputVal))
     console.log(bdays_found)
     updateCards(bdays_found)
@@ -161,8 +165,9 @@ function updateCards(bdays_found) {
 
     console.log(countArray);
     countArray.map((val,idx)=> {
-        if(val!=0) {
-            let card = document.getElementById(idx) //getting weekcard from its id that has to  be updated 
+        console.log(val);
+        
+            let card = document.getElementById(idx) //getting weekcard from its index that has to  be updated 
             console.log(card);
             birthdayDiv = card.childNodes.item(1) //  getting 1st child of weekcard(div where squares will be shown) 
             console.log(birthdayDiv);
@@ -171,11 +176,18 @@ function updateCards(bdays_found) {
                 birthdayDiv.removeChild(birthdayDiv.firstChild);
             }
 
+        if (val != 0) {
             val.map(a => {
                 let initials = getInitials(a.name);
                 console.log(initials);
                 createBirthdayCard(birthdayDiv, squareSize[val.length - 1], initials)
             });
+        } else {
+            let img = document.createElement("IMG");
+            img.src = "https://picsum.photos/seed/picsum/150/140";
+
+            birthdayDiv.appendChild(img);
+            console.log(birthdayDiv);
         }
     })
 }
