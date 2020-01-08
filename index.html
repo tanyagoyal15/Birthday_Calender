@@ -1,31 +1,28 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Birthday Calender</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="styles.min.css" />
-  </head>
 
-  <body>
-    <h1 style="text-align: center; font-weight: lighter;">Birthday Cal</h1>
-    <div class="calender">
-      <div id="main"></div>
-      <div id="noOfBirthdays"></div>
-      <form onsubmit="onClickUpdate()">
-        <textarea
-          rows="30"
-          cols="100"
-          id="data"
-          oninput="updateData()"
-        ></textarea>
-        <div>
-          <label>Year</label>
-          <input type="text" placeholder="YYYY..." id="myInput" />
-          <button type="submit">Update</button>
-        </div>
-      </form>
-    </div>
-    <script src="script.js"></script>
-    <script src="script.min.js"></script>
-  </body>
+<head>
+  <title>Birthday Calender</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.min.css" />
+</head>
+
+<body>
+  <h1 style="text-align: center; font-weight: lighter;">Birthday Cal</h1>
+  <div class="calender">
+    <div id="main"></div>
+    <div id="noOfBirthdays"></div>
+    <form onsubmit="onClickUpdate()">
+      <textarea rows="30" cols="100" id="data" oninput="updateData()"></textarea>
+      <div>
+        <label>Year</label>
+        <input type="text" placeholder="YYYY..." id="myInput" />
+        <button type="submit">Update</button>
+      </div>
+    </form>
+  </div>
+  <!-- <script src="script.js"></script> -->
+  <script src="script.min.js"></script>
+</body>
+
 </html>
