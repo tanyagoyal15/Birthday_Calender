@@ -117,6 +117,8 @@ var data = [
   }
 ];
 
+// var data = "hey";
+
 var birthdaysByDay = [0, 0, 0, 0, 0, 0, 0]; // initialize birthdays per day as 0
 let squareSize = ["sq1", "sq2", "sq3", "sq4"]; // styling to be used to display squares
 let currentInput = ""; // to store input by user
@@ -128,6 +130,18 @@ createWeekCards();
 function showData() {
   let myData = JSON.stringify(data, undefined, data.length);
   document.getElementById("data").innerHTML = myData;
+}
+
+function updateData() {
+  data = JSON.parse(document.getElementById("data").value);
+  showData();
+  birthdaysByDay = birthdaysByDay.map(_ => 0);
+  if (currentInput === "") {
+    updateCards([]);
+  } else {
+    let birthdaysFound = data.filter(d => d.birthday.includes(currentInput));
+    updateCards(birthdaysFound);
+  }
 }
 
 //CREATE WEEKCARDS FOR 7 DAYS
@@ -233,16 +247,30 @@ function displaySquares() {
     }
 
     if (birthdays !== 0) {
+      let selectedSqrSize = getSquareSize(birthdays.length);
       birthdays.forEach(a => {
         let initials = getInitials(a.name);
-        const squareIndex = birthdays.length - 1;
         //passing div that needs to be updated, type of sqr size and initials
-        renderPerson(birthdayDiv, squareIndex, initials);
+        renderPerson(birthdayDiv, selectedSqrSize, initials);
       });
     } else {
       renderDefault();
     }
   });
+}
+
+function getSquareSize(size) {
+  let squareSizeToBeUsed;
+  if (size == 1) {
+    squareSizeToBeUsed = squareSize[0];
+  } else if (size >= 2 && size <= 4) {
+    squareSizeToBeUsed = squareSize[1];
+  } else if (size >= 5 && size <= 8) {
+    squareSizeToBeUsed = squareSize[2];
+  } else {
+    squareSizeToBeUsed = squareSize[3];
+  }
+  return squareSizeToBeUsed;
 }
 
 //GET INITIALS FROM NAME
@@ -268,7 +296,7 @@ function renderDefault() {
 function renderPerson(birthdayDiv, squareIndex, name) {
   //creating a square for a Person
   let birthdayCard = document.createElement("div");
-  birthdayCard.className = squareIndex < 4 ? squareSize[squareIndex] : "sq4";
+  birthdayCard.className = squareIndex;
   birthdayCard.style.background = generateRandomColor();
 
   //creating a span element for name

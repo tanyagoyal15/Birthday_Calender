@@ -72,9 +72,9 @@ form button {
 .birthdayCard {
   height: 80%;
   border: 1px solid #cccccc;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
 .sq1 {

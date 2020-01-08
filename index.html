@@ -12,7 +12,12 @@
       <div id="main"></div>
       <div id="noOfBirthdays"></div>
       <form onsubmit="onClickUpdate()">
-        <textarea rows="30" cols="100" id="data"></textarea>
+        <textarea
+          rows="30"
+          cols="100"
+          id="data"
+          oninput="updateData()"
+        ></textarea>
         <div>
           <label>Year</label>
           <input type="text" placeholder="YYYY..." id="myInput" />
